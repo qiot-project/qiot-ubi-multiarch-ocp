@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  annotations: {}
+  name: qemu-user-static
+  namespace: qemu-user-static
+spec:
+  selector:
+    matchLabels:
+      app: qemu-user-static
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: qemu-user-static
+    spec:
+      containers:
+      - args: [ "/register --reset && trap : TERM INT; sleep 9999999999d & wait" ]
+        command:
+        - /bin/sh
+        - -c
+        - --
+        image: multiarch/qemu-user-static
+        imagePullPolicy: IfNotPresent
+        name: qemu-user-static
+        resources: {}
+        securityContext:
+          privileged: true
+      serviceAccount: qemu-user-static
+  
